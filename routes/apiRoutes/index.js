@@ -1,11 +1,12 @@
 const fs = require('fs');
-const path = require('path')
+const path = require('path');
+const { nanoid } = require('nanoid');
 const router = require('express').Router();
 const notes = require('../../db/db.json');
 
 function createNewNote(body, noteArray) {
     const note = body;
-    note.id = 2;
+    note.id = nanoid(10);
     noteArray.push(note);
     fs.writeFileSync(
         path.join(__dirname, '../../db/db.json'),
@@ -15,12 +16,10 @@ function createNewNote(body, noteArray) {
 };
 
 router.get('/notes', (req, res) => {
-    console.log(notes);
     res.json(notes);
 });
 
 router.post('/notes', (req, res) => {
-    console.log(req.body);
     const note = createNewNote(req.body, notes)
     res.json(note);
 });
