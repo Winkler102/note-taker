@@ -15,12 +15,26 @@ function createNewNote(body, noteArray) {
     return body;
 };
 
+function deleteNote(id, noteArray) {
+    noteArray.splice(noteArray.findIndex(noteObject => noteObject.id === id), 1);
+    fs.writeFileSync(
+        path.join(__dirname, '../../db/db.json'),
+        JSON.stringify(noteArray, null, 2)
+    );
+    return id;
+};
+
 router.get('/notes', (req, res) => {
     res.json(notes);
 });
 
 router.post('/notes', (req, res) => {
     const note = createNewNote(req.body, notes)
+    res.json(note);
+});
+
+router.delete('/notes/:id', (req, res) => {
+    const note = deleteNote(req.params.id, notes)
     res.json(note);
 });
 
